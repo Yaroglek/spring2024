@@ -5,14 +5,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Сущность настольной игры.
+ * Настольная игра.
  */
 @Entity
 @Table(name = "games")
@@ -33,65 +32,59 @@ public class BoardGame {
      * Название игры.
      */
     @Column(name = "game_name")
-    @Setter
     private String name;
 
     /**
      * Дата выхода игры.
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(name = "game_date")
-    @Setter
-    private Date releaseDate;
+    @Column(name = "game_dttm")
+    private LocalDateTime dateTime;
 
     /**
      * Производитель игры.
      */
-    @Column(name = "game_manufacturer")
-    @Setter
-    private String manufacturer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "game_manufacturer")
+    private Manufacturer manufacturer;
 
     /**
      * Описание игры.
      */
     @Column(name = "game_description")
-    @Setter
     private String description;
 
     /**
      * Минимальный рекомендованный возраст.
      */
     @Column(name = "game_age")
-    @Setter
-    private String recommendedAge;
+    private Integer recommendedAge;
 
     /**
      * Рекомендованное количество игроков.
      */
     @Column(name = "game_players")
-    @Setter
-    private String amountOfPlayers;
+    private Integer amountOfPlayers;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "game_categories")
-    @Setter
     private List<BoardGameCategories> categories;
 
     /**
      * Список отзывов на игру.
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "boardGame")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardGame")
     private List<Review> reviews;
 
     /**
      * Список мероприятий, привязанных к игре.
      */
-    @ManyToMany(mappedBy = "games")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "games")
     private List<Event> events;
 
     /**
      * Список обусждений, привязанных к игре.
      */
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "boardGame")
-//    private List<Discussion> discussions;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardGame")
+    private List<Discussion> discussions;
 }

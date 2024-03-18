@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,16 +33,14 @@ public class Event {
      * Название мероприятия.
      */
     @Column(name = "event_title")
-    @Setter
     private String title;
 
     /**
      * Дата проведения мероприятия.
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(name = "event_date")
-    @Setter
-    private Date date;
+    @Column(name = "event_dttm")
+    private LocalDateTime datetime;
 
     /**
      * Место проведения мероприятия.

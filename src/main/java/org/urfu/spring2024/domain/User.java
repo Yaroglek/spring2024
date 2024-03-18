@@ -66,7 +66,7 @@ public class User {
     @JoinTable(
             name = "user_game",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "review_id")
+            inverseJoinColumns = @JoinColumn(name = "game_id")
     )
     private List<BoardGame> trackedGames;
 

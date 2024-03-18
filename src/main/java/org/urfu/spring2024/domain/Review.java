@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 /**
@@ -37,24 +37,23 @@ public class Review {
     private String text;
 
     /**
-     * Дата публикации отзыва.
+     * Дата и время публикации отзыва.
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(name = "review_date")
-    @Setter
-    private Date date;
+    @Column(name = "review_dttm")
+    private LocalDateTime datetime;
 
     /**
      * Автор отзыва.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
     /**
      * Игра, на которую отзыв был оставлен.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
     private BoardGame boardGame;
 }

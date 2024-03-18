@@ -1,8 +1,8 @@
 package org.urfu.spring2024.app;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.urfu.spring2024.domain.User;
 import org.urfu.spring2024.extern.repository.UserRepository;
@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Slf4j
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -45,13 +44,13 @@ public class UserService {
      */
     public User getUserById(long userId) {
         User searchedUser = userRepository.findById(userId);
-        if (searchedUser == null)
+        if (searchedUser == null) {
             log.error("Пользователь с ID {} не найден", userId);
-        else {
+            return null;
+        } else {
             log.info("Пользователь с ID {} найден", userId);
             return searchedUser;
         }
-        return null;
     }
 
     //TODO доделать остальные методы
