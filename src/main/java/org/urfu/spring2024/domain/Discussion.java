@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -31,11 +33,12 @@ public class Discussion {
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User topicStarter;
 
     /**
-     * Игра, привязанная к обсуждению (не может быть не привязанного к какой-либо обсуждения).
+     * Игра, привязанная к обсуждению (не может быть не привязанно ни к одной игре).
      */
+    @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
     private BoardGame game;
@@ -57,6 +60,7 @@ public class Discussion {
     /**
      * Список сообщений в ветке.
      */
+    @OrderBy
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "discussion")
     private List<Message> messages;
 }

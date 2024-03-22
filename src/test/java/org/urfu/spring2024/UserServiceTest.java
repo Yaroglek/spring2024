@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest
+@Sql("/test.sql")
 class UserServiceTest {
 
     @Autowired
@@ -32,7 +33,6 @@ class UserServiceTest {
         assertNotNull(registeredUser.getId());
     }
 
-    @Sql("/test.sql")
     @Test
     public void testFindUserByID() {
         User searchedUser = userService.getUserById(1);
@@ -40,7 +40,6 @@ class UserServiceTest {
         assertEquals(1, searchedUser.getId());
     }
 
-    @Sql("/test.sql")
     @Test
     public void testUserNotFoundByID() {
         assertNull(userService.getUserById(3));

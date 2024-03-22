@@ -32,7 +32,7 @@ public class Message {
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User author;
 
     /**
      * Ветка, в которой было оставлено сообщение.
