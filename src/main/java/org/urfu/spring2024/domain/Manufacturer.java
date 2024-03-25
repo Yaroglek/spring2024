@@ -22,7 +22,7 @@ public class Manufacturer {
      * Уникальный идентификатор производителя.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "manufacturer_id")
     private Long id;
 

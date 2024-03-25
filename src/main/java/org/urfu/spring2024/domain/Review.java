@@ -41,7 +41,7 @@ public class Review {
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "review_dttm")
-    private LocalDateTime datetime;
+    private LocalDateTime createdDTTM;
 
     /**
      * Автор отзыва.

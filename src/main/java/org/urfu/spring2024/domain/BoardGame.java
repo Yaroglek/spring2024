@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class BoardGame {
      * Уникальный идентификатор игры.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_id")
     private Long id;
 
@@ -32,6 +33,7 @@ public class BoardGame {
      * Название игры.
      */
     @Column(name = "game_name")
+    @Setter
     private String name;
 
     /**
@@ -39,7 +41,7 @@ public class BoardGame {
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "game_dttm")
-    private LocalDateTime dateTime;
+    private LocalDateTime releasedDTTM;
 
     /**
      * Производитель игры.
@@ -66,9 +68,13 @@ public class BoardGame {
     @Column(name = "game_players")
     private Integer amountOfPlayers;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "game_categories")
-    private List<BoardGameCategories> categories;
+    @ManyToMany
+    @JoinTable(
+            name = "game_category",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
 
     /**
      * Список отзывов на игру.

@@ -73,6 +73,6 @@ public class User {
     /**
      * Посещенные пользователем мероприятия.
      */
-    @ManyToMany(mappedBy = "participants")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "participants")
     private List<Event> eventsAttended;
 }

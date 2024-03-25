@@ -23,7 +23,7 @@ public class Message {
      * Уникальный идентификатор сообщения.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
 
@@ -43,11 +43,11 @@ public class Message {
 
 
     /**
-     * Дата и время создания ветки.
+     * Дата и время создания сообщения.
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "message_dttm")
-    private LocalDateTime dateTime;
+    private LocalDateTime createdDTTM;
 
     /**
      * Содержимое сообщения

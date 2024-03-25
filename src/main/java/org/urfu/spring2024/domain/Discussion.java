@@ -24,7 +24,7 @@ public class Discussion {
      * Уникальный идентификатор обсуждения.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "discussion_id")
     private Long id;
 
@@ -41,14 +41,14 @@ public class Discussion {
     @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
-    private BoardGame game;
+    private BoardGame boardGame;
 
     /**
      * Дата и время создания ветки.
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "discussion_dttm")
-    private LocalDateTime dateTime;
+    private LocalDateTime createdDTTM;
 
     /**
      * Тема обсуждения.
