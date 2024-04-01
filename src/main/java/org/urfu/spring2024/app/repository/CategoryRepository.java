@@ -7,4 +7,6 @@ import org.urfu.spring2024.domain.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Category findById(long id);
+
+    void deleteById(long id);
 }

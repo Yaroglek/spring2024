@@ -8,7 +8,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.urfu.spring2024.app.repository.BoardGameRepository;
 import org.urfu.spring2024.app.service.BoardGameService;
+import org.urfu.spring2024.app.service.CategoryService;
 import org.urfu.spring2024.domain.BoardGame;
+import org.urfu.spring2024.domain.Category;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,6 +21,8 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 @DataJpaTest
 class BoardGameServiceTest {
+    @Mock
+    private CategoryService categoryService;
     @Mock
     private BoardGameRepository boardGameRepository;
 
@@ -28,9 +34,9 @@ class BoardGameServiceTest {
         BoardGame game = BoardGame.builder().id(1L).name("game1").build();
 
         when(boardGameRepository.save(game)).thenReturn(game);
-        BoardGame registeredUser = boardGameService.createBoardGame(game);
+        BoardGame createdGame = boardGameService.createBoardGame(game);
 
-        assertNotNull(registeredUser.getId());
+        assertNotNull(createdGame.getId());
     }
 
     @Test
@@ -64,5 +70,18 @@ class BoardGameServiceTest {
         boardGameService.deleteBoardGameByID(4L);
 
         verify(boardGameRepository, times(1)).deleteById(4L);
+    }
+
+    @Test
+    public void testAddCategory() {
+        BoardGame game = BoardGame.builder().id(1L).name("game1").categories(new ArrayList<>()).build();
+        Category category = Category.builder().id(1L).name("category1").build();
+
+        when(boardGameRepository.findById(1L)).thenReturn(game);
+        when(categoryService.getCategoryByID(1L)).thenReturn(category);
+
+        boardGameService.addCategory(1L, 1L);
+
+        assertEquals(1, game.getCategories().size());
     }
 }
