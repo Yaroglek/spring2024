@@ -33,9 +33,9 @@ public class UserService {
         }
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
-            log.info("Создан пользователь с ID {}", user.getId());
-            return user;
+            User savedUser = userRepository.save(user);
+            log.info("Создан пользователь с id {}", savedUser.getId());
+            return savedUser;
         } catch (Exception e) {
             throw new RuntimeException("Произошла ошибка при регистрации нового пользователя", e);
         }

@@ -2,10 +2,7 @@ package org.urfu.spring2024.domain;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -19,6 +16,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BoardGame {
 
     /**
@@ -33,7 +31,6 @@ public class BoardGame {
      * Название игры.
      */
     @Column(name = "game_name")
-    @Setter
     private String name;
 
     /**

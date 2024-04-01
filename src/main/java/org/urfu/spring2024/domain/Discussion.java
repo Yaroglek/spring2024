@@ -54,7 +54,6 @@ public class Discussion {
      * Тема обсуждения.
      */
     @Column(name = "discussion_topic")
-    @Getter
     private String topic;
 
     /**
