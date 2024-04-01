@@ -1,27 +1,21 @@
 package org.urfu.spring2024.service;
 
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.urfu.spring2024.app.service.BoardGameService;
 import org.urfu.spring2024.app.service.UserService;
-import org.urfu.spring2024.domain.BoardGame;
 import org.urfu.spring2024.domain.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest
+@DataJpaTest
 @Sql("/test.sql")
 class UserServiceTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private BoardGameService boardGameService;
 
     @Test
     public void testRegisterNewUser() {
@@ -32,6 +26,11 @@ class UserServiceTest {
         User registeredUser = userService.registerNewUser(user);
 
         assertNotNull(registeredUser.getId());
+    }
+
+    @Test
+    public void testUserNotRegistered() {
+        assertThrows(IllegalArgumentException.class, () -> userService.registerNewUser(null));
     }
 
     @Test

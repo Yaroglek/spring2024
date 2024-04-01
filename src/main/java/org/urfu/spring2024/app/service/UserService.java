@@ -22,7 +22,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     /**
-     * Регистрация нового пользователя. Происходит преобразование пароля в более сложный с помощью BCrypt
+     * Регистрация нового пользователя. Происходит шифрование пароля с помощью BCrypt
      *
      * @param user - объект пользователя для регистрации.
      * @return - зарегестрированный пользователь.
@@ -85,7 +85,7 @@ public class UserService {
         if (!user.getTrackedGames().contains(game)) {
             user.getTrackedGames().add(game);
             userRepository.save(user);
-            log.info("Пользователь с ID {} отслеживает игру с ID {}", userID, gameID);
+            log.info("Пользователь с ID {} отслеживает игру {} (ID {})", userID, game.getName(), gameID);
         }
     }
 

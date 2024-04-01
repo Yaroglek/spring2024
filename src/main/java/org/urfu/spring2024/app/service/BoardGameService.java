@@ -82,7 +82,7 @@ public class BoardGameService {
         if (!game.getCategories().contains(category)) {
             game.getCategories().add(category);
             boardGameRepository.save(game);
-            log.info("Игра с ID {} принадлежит к категории с ID {}", gameID, categoryID);
+            log.info("Игра {} (ID {}) принадлежит к категории {} (ID {})", game.getName(), gameID, category.getName(), categoryID);
         }
     }
 

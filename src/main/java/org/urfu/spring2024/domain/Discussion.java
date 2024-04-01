@@ -48,7 +48,7 @@ public class Discussion {
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "discussion_dttm")
-    private LocalDateTime createdDTTM;
+    private LocalDateTime createdDttm;
 
     /**
      * Тема обсуждения.

@@ -47,7 +47,7 @@ public class Message {
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "message_dttm")
-    private LocalDateTime createdDTTM;
+    private LocalDateTime createdDttm;
 
     /**
      * Содержимое сообщения

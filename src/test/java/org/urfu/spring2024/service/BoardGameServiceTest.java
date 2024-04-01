@@ -1,8 +1,9 @@
 package org.urfu.spring2024.service;
 
+import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.urfu.spring2024.app.service.BoardGameService;
 import org.urfu.spring2024.domain.BoardGame;
@@ -10,7 +11,7 @@ import org.urfu.spring2024.domain.BoardGame;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest
+@DataJpaTest
 @Sql("/test.sql")
 class BoardGameServiceTest {
 
@@ -23,6 +24,11 @@ class BoardGameServiceTest {
         BoardGame createdGame = boardGameService.createBoardGame(game);
 
         assertNotNull(createdGame.getId());
+    }
+
+    @Test
+    public void testBoardGameNotCreated() {
+        assertThrows(IllegalArgumentException.class, () -> boardGameService.createBoardGame(null));
     }
 
     @Test
