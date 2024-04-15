@@ -25,17 +25,17 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<User, Use
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
-        userDTO.setPassword(user.getPassword());
         userDTO.setAdditionalInfo(user.getAdditionalInfo());
-        userDTO.setReviewsIDs(user.getReviews().stream()
+        userDTO.setReviewsIds(user.getReviews().stream()
                 .map(Review::getId)
                 .collect(Collectors.toList()));
-        userDTO.setTrackedGamesIDs(user.getTrackedGames().stream()
+        userDTO.setTrackedGamesIds(user.getTrackedGames().stream()
                 .map(BoardGame::getId)
                 .collect(Collectors.toList()));
-        userDTO.setEventsAttendedIDs(user.getEventsAttended().stream()
+        userDTO.setEventsAttendedIds(user.getEventsAttended().stream()
                 .map(Event::getId)
                 .collect(Collectors.toList()));
+
         return userDTO;
     }
 }

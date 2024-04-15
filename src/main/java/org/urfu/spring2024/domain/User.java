@@ -38,13 +38,6 @@ public class User {
     private String email;
 
     /**
-     * Пароль пользователя.
-     */
-    @Column(name = "user_password")
-    @Setter
-    private String password;
-
-    /**
      * Дополнительная информация о пользователе.
      */
     @Column(name = "user_info")

@@ -9,6 +9,8 @@ import org.urfu.spring2024.app.repository.BoardGameRepository;
 import org.urfu.spring2024.domain.BoardGame;
 import org.urfu.spring2024.domain.Category;
 
+import java.util.List;
+
 /**
  * Сервисный класс для работы с польователем.
  */
@@ -31,7 +33,7 @@ public class BoardGameService {
         }
         try {
             boardGameRepository.save(game);
-            log.info("Создан пользователь с ID {}", game.getId());
+            log.info("Создана игра с ID {}", game.getId());
             return game;
         } catch (Exception e) {
             throw new RuntimeException("Произошла ошибка при сохранении новой игры", e);
@@ -41,50 +43,111 @@ public class BoardGameService {
     /**
      * Поиск игры в БД по её id.
      *
-     * @param gameID - уникальный идентификатор для поиска игры.
+     * @param gameId - уникальный идентификатор для поиска игры.
      * @return - игра с указанным id.
      */
-    public BoardGame getBoardGameByID(long gameID) {
-        BoardGame searchedGame = boardGameRepository.findById(gameID);
-        if (searchedGame == null) {
-            throw new IllegalArgumentException("Игра с ID " + gameID + " не найдена");
-        } else {
-            log.info("Игра с ID {} найдена", gameID);
-            return searchedGame;
-        }
+    public BoardGame getBoardGameById(long gameId) {
+        var searchedGame = boardGameRepository.findById(gameId)
+                .orElseThrow(() -> new IllegalArgumentException("Игра с ID " + gameId + " не найдена"));
+        log.info("Игра с ID {} найдена", gameId);
+        return searchedGame;
     }
 
     /**
      * Удаление игры из БД по её id.
      *
-     * @param gameID - уникальный идентификатор для поиска игры.
+     * @param gameId - уникальный идентификатор для поиска игры.
      */
-    public void deleteBoardGameByID(long gameID) {
-        BoardGame searchedGame = boardGameRepository.findById(gameID);
+    public void deleteBoardGameById(long gameId) {
+        BoardGame searchedGame = getBoardGameById(gameId);
         if (searchedGame == null) {
-            throw new IllegalArgumentException("Игра с ID " + gameID + " не найдена");
+            throw new IllegalArgumentException("Игра с ID " + gameId + " не найдена");
         } else {
-            boardGameRepository.deleteById(gameID);
-            log.info("Игра с ID {} удалена", gameID);
+            boardGameRepository.deleteById(gameId);
+            log.info("Игра с ID {} удалена", gameId);
         }
     }
 
     /**
      * Добавление категории в список категорий игры.
      *
-     * @param gameID - уникальный идентификатор для поиска игры.
-     * @param categoryID - уникальный идентификатор для поиска категории.
+     * @param gameId - уникальный идентификатор для поиска игры.
+     * @param categoryId - уникальный идентификатор для поиска категории.
      */
-    public void addCategory(long gameID, long categoryID) {
-        BoardGame game = getBoardGameByID(gameID);
-        Category category = categoryService.getCategoryByID(categoryID);
+    public void addCategory(long gameId, long categoryId) {
+        BoardGame game = getBoardGameById(gameId);
+        Category category = categoryService.getCategoryById(categoryId);
 
         if (!game.getCategories().contains(category)) {
             game.getCategories().add(category);
             boardGameRepository.save(game);
-            log.info("Игра {} (ID {}) принадлежит к категории {} (ID {})", game.getName(), gameID, category.getName(), categoryID);
+            log.info("Игра {} (ID {}) принадлежит к категории {} (ID {})", game.getName(), gameId, category.getName(), categoryId);
         }
     }
 
-    //TODO остальные методы сервиса
+    /**
+     * Удаление категории из списка категорий игры.
+     *
+     * @param gameId - уникальный идентификатор для поиска игры.
+     * @param categoryId - уникальный идентификатор для поиска категории.
+     */
+    public void removeCategory(long gameId, long categoryId) {
+        BoardGame game = getBoardGameById(gameId);
+        Category category = categoryService.getCategoryById(categoryId);
+
+        if (game.getCategories().contains(category)) {
+            game.getCategories().remove(category);
+            boardGameRepository.save(game);
+            log.info("Игра {} (ID {}) более не принадлежит к категории {} (ID {})", game.getName(), gameId, category.getName(), categoryId);
+        }
+    }
+
+    /**
+     * Полчуение всех игр из базы данных.
+     *
+     * @return - список всех игр.
+     */
+    public List<BoardGame> getAllBoardGames() {
+        return boardGameRepository.findAll();
+    }
+
+    /**
+     * Полчуение всех игр, содержащих в названии определенную строку.
+     *
+     * @param name - строка для поиска
+     * @return - список игр.
+     */
+    public List<BoardGame> getBoardGamesByName(String name) {
+        return boardGameRepository.findAllByNameContainsIgnoreCase(name);
+    }
+
+//    /**
+//     * Полчуение всех игр, подпадающих под определенную категорию.
+//     *
+//     * @param category - категория для поиска.
+//     * @return - список игр.
+//     */
+//    public List<BoardGame> getBoardGamesByCategory(Category category) {
+//        return boardGameRepository.findBoardGamesByCategoriesContains(category);
+//    }
+//
+//    /**
+//     * Полчуение всех игр, для которых рекомендованный возраст меньше запрашиваемого.
+//     *
+//     * @param age - запрашиваемы возраст.
+//     * @return - список игр.
+//     */
+//    public List<BoardGame> getBoardGamesByRecommendedAge(int age) {
+//        return boardGameRepository.findBoardGamesByRecommendedAgeLessThanEqual(age);
+//    }
+//
+//    /**
+//     * Полчуение всех игр, для которых рекомендованное количество игроков равняется запрашиваемому.
+//     *
+//     * @param players - запрашиваемое количество игроков.
+//     * @return - список игр.
+//     */
+//    public List<BoardGame> getBoardGamesByAmountOfPlayers(int players) {
+//        return boardGameRepository.findBoardGamesByAmountOfPlayersEquals(players);
+//    }
 }

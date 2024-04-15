@@ -1,4 +1,4 @@
-package org.urfu.spring2024.service;
+package org.urfu.spring2024.app.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -8,12 +8,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.urfu.spring2024.app.repository.UserRepository;
-import org.urfu.spring2024.app.service.BoardGameService;
-import org.urfu.spring2024.app.service.UserService;
 import org.urfu.spring2024.domain.BoardGame;
 import org.urfu.spring2024.domain.User;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,21 +35,21 @@ class UserServiceTest {
         User user = User.builder().id(1L).username("user1").build();
 
         when(userRepository.save(user)).thenReturn(user);
-        User registeredUser = userService.registerNewUser(user);
+        User registeredUser = userService.createUser(user);
 
         assertNotNull(registeredUser.getId());
     }
 
     @Test
     public void testUserNotRegistered() {
-        assertThrows(IllegalArgumentException.class, () -> userService.registerNewUser(null));
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(null));
     }
 
     @Test
     public void testFindUserByID() {
         User user = User.builder().id(1L).username("user1").build();
 
-        when(userRepository.findById(1L)).thenReturn(user);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         User searchedUser = userService.getUserById(1L);
 
         assertNotNull(searchedUser);
@@ -59,7 +58,7 @@ class UserServiceTest {
 
     @Test
     public void testUserNotFoundByID() {
-        when(userRepository.findById(3L)).thenReturn(null);
+        when(userRepository.findById(3L)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> userService.getUserById(3L));
     }
@@ -68,7 +67,7 @@ class UserServiceTest {
     public void testDeleteUser() {
         User user = User.builder().id(3L).username("user1").build();
 
-        when(userRepository.findById(3L)).thenReturn(user);
+        when(userRepository.findById(3L)).thenReturn(Optional.of(user));
         userService.deleteUserById(3L);
 
         verify(userRepository, times(1)).deleteById(3L);
@@ -79,11 +78,26 @@ class UserServiceTest {
         User user = User.builder().id(1L).username("user1").trackedGames(new ArrayList<>()).build();
         BoardGame game = BoardGame.builder().id(1L).name("game1").build();
 
-        when(userRepository.findById(1L)).thenReturn(user);
-        when(boardGameService.getBoardGameByID(1L)).thenReturn(game);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(boardGameService.getBoardGameById(1L)).thenReturn(game);
 
         userService.trackGame(1L, 1L);
 
         assertEquals(1, user.getTrackedGames().size());
+    }
+
+    @Test
+    public void testUnTrackGame() {
+        User user = User.builder().id(1L).username("user1").trackedGames(new ArrayList<>()).build();
+        BoardGame game = BoardGame.builder().id(1L).name("game1").build();
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(boardGameService.getBoardGameById(1L)).thenReturn(game);
+
+        userService.trackGame(1L, 1L);
+        assertEquals(1, user.getTrackedGames().size());
+
+        userService.unTrackGame(1L, 1L);
+        assertEquals(0, user.getTrackedGames().size());
     }
 }

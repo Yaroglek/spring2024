@@ -37,31 +37,28 @@ public class CategoryService {
     /**
      * Поиск категории в БД по её id.
      *
-     * @param categoryID - уникальный идентификатор для поиска категории.
+     * @param categoryId - уникальный идентификатор для поиска категории.
      * @return - категория с указанным id.
      */
-    public Category getCategoryByID(long categoryID) {
-        Category searchedCategory = categoryRepository.findById(categoryID);
-        if (searchedCategory == null) {
-            throw new IllegalArgumentException("Категория с ID " + categoryID + " не найдена");
-        } else {
-            log.info("Категория с ID {} найдена", categoryID);
-            return searchedCategory;
-        }
+    public Category getCategoryById(long categoryId) {
+        var searchedCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Категория с ID " + categoryId + " не найдена"));
+        log.info("Категория с ID {} найдена", categoryId);
+        return searchedCategory;
     }
 
     /**
      * Удаление категории из БД по её id.
      *
-     * @param categoryID - уникальный идентификатор для поиска категории.
+     * @param categoryId - уникальный идентификатор для поиска категории.
      */
-    public void deleteCategoryByID(long categoryID) {
-        Category searchedCategory = categoryRepository.findById(categoryID);
+    public void deleteCategoryById(long categoryId) {
+        Category searchedCategory = getCategoryById(categoryId);
         if (searchedCategory == null) {
-            throw new IllegalArgumentException("Категория с ID " + categoryID + " не найдена");
+            throw new IllegalArgumentException("Категория с ID " + categoryId + " не найдена");
         } else {
-            categoryRepository.deleteById(categoryID);
-            log.info("Категория с ID {} удалена", categoryID);
+            categoryRepository.deleteById(categoryId);
+            log.info("Категория с ID {} удалена", categoryId);
         }
     }
 }
