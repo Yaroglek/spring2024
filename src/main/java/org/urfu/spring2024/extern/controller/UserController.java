@@ -1,5 +1,6 @@
 package org.urfu.spring2024.extern.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class UserController {
     private UserAssembler userAssembler;
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
         User newUser = User.builder()
                 .username(userDTO.getUsername())
                 .email(userDTO.getEmail())

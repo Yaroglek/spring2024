@@ -1,5 +1,6 @@
 package org.urfu.spring2024.extern.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class BoardGameController {
     private ManufacturerService manufacturerService;
 
     @PostMapping
-    public ResponseEntity<BoardGameDTO> createGame(@RequestBody BoardGameDTO gameDTO) {
+    public ResponseEntity<BoardGameDTO> createGame(@RequestBody @Valid BoardGameDTO gameDTO) {
 
         BoardGame newGame = BoardGame.builder()
                 .name(gameDTO.getName())
@@ -76,7 +77,7 @@ public class BoardGameController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BoardGameDTO>> getBoardGamesWithFilters(@RequestBody FiltersDTO filtersDTO) {
+    public ResponseEntity<List<BoardGameDTO>> getBoardGamesWithFilters(@RequestBody @Valid FiltersDTO filtersDTO) {
         List<BoardGameDTO> games = boardGameService.getBoardGamesWithFilters(filtersDTO.getName(),
                         filtersDTO.getCategoriesIds(),
                         filtersDTO.getRecommendedAge(),

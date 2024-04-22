@@ -1,5 +1,6 @@
 package org.urfu.spring2024.extern.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class ManufacturerController {
     private ManufacturerAssembler manufacturerAssembler;
 
     @PostMapping
-    public ResponseEntity<ManufacturerDTO> createCategory(@RequestBody ManufacturerDTO manufacturerDTO) {
+    public ResponseEntity<ManufacturerDTO> createCategory(@RequestBody @Valid ManufacturerDTO manufacturerDTO) {
         Manufacturer newManufacturer = Manufacturer.builder()
                 .name(manufacturerDTO.getName())
                 .description(manufacturerDTO.getDescription())
