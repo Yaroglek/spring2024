@@ -43,7 +43,7 @@ public class CategoryService {
     public Category getCategoryById(long categoryId) {
         var searchedCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Категория с ID " + categoryId + " не найдена"));
-        log.info("Категория с ID {} найдена", categoryId);
+        log.debug("Категория с ID {} найдена", categoryId);
         return searchedCategory;
     }
 
@@ -53,12 +53,7 @@ public class CategoryService {
      * @param categoryId - уникальный идентификатор для поиска категории.
      */
     public void deleteCategoryById(long categoryId) {
-        Category searchedCategory = getCategoryById(categoryId);
-        if (searchedCategory == null) {
-            throw new IllegalArgumentException("Категория с ID " + categoryId + " не найдена");
-        } else {
-            categoryRepository.deleteById(categoryId);
-            log.info("Категория с ID {} удалена", categoryId);
-        }
+        categoryRepository.deleteById(categoryId);
+        log.info("Категория с ID {} удалена", categoryId);
     }
 }

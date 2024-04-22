@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.urfu.spring2024.app.service.BoardGameService;
 import org.urfu.spring2024.app.service.ManufacturerService;
 import org.urfu.spring2024.domain.BoardGame;
-import org.urfu.spring2024.domain.Manufacturer;
 import org.urfu.spring2024.extern.assembler.BoardGameAssembler;
 import org.urfu.spring2024.extern.dto.BoardGameDTO;
+import org.urfu.spring2024.extern.dto.FiltersDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +45,10 @@ public class BoardGameController {
 
     @GetMapping
     public ResponseEntity<List<BoardGameDTO>> getAllBoardGames() {
-        List<BoardGame> allGames = boardGameService.getAllBoardGames();
-
-        List<BoardGameDTO> gameDTOS = new ArrayList<>();
-        for (BoardGame game : allGames) {
-            BoardGameDTO gameDTO = boardGameAssembler.toModel(game);
-            gameDTOS.add(gameDTO);
-        }
-
-        return ResponseEntity.ok(gameDTOS);
+        List<BoardGameDTO> games = boardGameService.getAllBoardGames().stream()
+                .map(boardGameAssembler::toModel)
+                .toList();
+        return ResponseEntity.ok(games);
     }
 
     @GetMapping("/{id}")
@@ -68,28 +63,26 @@ public class BoardGameController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{gameId}/trackedGames/{categoryId}")
+    @PutMapping("/{gameId}/categories/{categoryId}")
     public ResponseEntity<Void> addCategory(@PathVariable long gameId, @PathVariable long categoryId) {
         boardGameService.addCategory(gameId, categoryId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{gameId}/trackedGames/{categoryId}")
+    @DeleteMapping("/{gameId}/categories/{categoryId}")
     public ResponseEntity<Void> removeCategory(@PathVariable long gameId, @PathVariable long categoryId) {
         boardGameService.removeCategory(gameId, categoryId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BoardGameDTO>> getBoardGamesByName(@RequestParam String name) {
-        List<BoardGame> searchedGames = boardGameService.getBoardGamesByName(name);
-
-        List<BoardGameDTO> gameDTOS = new ArrayList<>();
-        for (BoardGame game : searchedGames) {
-            BoardGameDTO gameDTO = boardGameAssembler.toModel(game);
-            gameDTOS.add(gameDTO);
-        }
-
-        return ResponseEntity.ok(gameDTOS);
+    public ResponseEntity<List<BoardGameDTO>> getBoardGamesWithFilters(@RequestBody FiltersDTO filtersDTO) {
+        List<BoardGameDTO> games = boardGameService.getBoardGamesWithFilters(filtersDTO.getName(),
+                        filtersDTO.getCategoriesIds(),
+                        filtersDTO.getRecommendedAge(),
+                        filtersDTO.getAmountOfPlayers())
+                .stream()
+                .map(boardGameAssembler::toModel).toList();
+        return ResponseEntity.ok(games);
     }
 }

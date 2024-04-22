@@ -96,32 +96,19 @@ class BoardGameServiceTest {
         boardGameService.addCategory(1L, 1L);
         assertEquals(1, game.getCategories().size());
 
-        boardGameService.removeCategory(1L,1L);
+        boardGameService.removeCategory(1L, 1L);
         assertEquals(0, game.getCategories().size());
     }
 
     @Test
     public void testGetAllBoardGames() {
-        List<BoardGame> books = new ArrayList<>();
-        books.add(new BoardGame());
-        books.add(new BoardGame());
+        List<BoardGame> games = new ArrayList<>();
+        games.add(new BoardGame());
+        games.add(new BoardGame());
 
-        when(boardGameRepository.findAll()).thenReturn(books);
+        when(boardGameRepository.findAll()).thenReturn(games);
 
         List<BoardGame> result = boardGameService.getAllBoardGames();
         assertEquals(2, result.size());
-    }
-
-    @Test
-    public void testGetBoardGamesByName() {
-        List<BoardGame> books = new ArrayList<>();
-        books.add(new BoardGame());
-        books.add(new BoardGame());
-        books.add(new BoardGame());
-
-        when(boardGameRepository.findAllByNameContainsIgnoreCase(eq("Game1"))).thenReturn(books);
-
-        List<BoardGame> result = boardGameService.getBoardGamesByName("Game1");
-        assertEquals(3, result.size());
     }
 }

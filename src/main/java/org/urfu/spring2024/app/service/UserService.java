@@ -48,7 +48,7 @@ public class UserService {
     public User getUserById(long userId) {
         var searchedUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь с ID " + userId + " не найден"));
-        log.info("Пользователь с ID {} найден", userId);
+        log.debug("Пользователь с ID {} найден", userId);
         return searchedUser;
     }
 
@@ -58,13 +58,8 @@ public class UserService {
      * @param userId - уникальный идентификатор для поиска пользователя.
      */
     public void deleteUserById(long userId) {
-        User searchedUser = getUserById(userId);
-        if (searchedUser == null) {
-            throw new IllegalArgumentException("Пользователь с ID " + userId + " не найден");
-        } else {
-            userRepository.deleteById(userId);
-            log.info("Пользователь с ID {} удален", userId);
-        }
+        userRepository.deleteById(userId);
+        log.info("Пользователь с ID {} удален", userId);
     }
 
     /**
@@ -85,7 +80,7 @@ public class UserService {
     }
 
     /**
-     * Удаление игры тз списка отслеживаемых пользователем игр.
+     * Удаление игры из списка отслеживаемых пользователем игр.
      *
      * @param userId - уникальный идентификатор для поиска пользователя.
      * @param gameId - уникальный идентификатор для поиска игры.

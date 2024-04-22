@@ -40,7 +40,7 @@ public class ManufacturerService {
     public Manufacturer getManufacturerById(long manufacturerID) {
         var searchedManufacturer = manufacturerRepository.findById(manufacturerID)
                 .orElseThrow(() -> new IllegalArgumentException("Производитель с ID " + manufacturerID + " не найден"));
-        log.info("Производитель с ID {} найден", manufacturerID);
+        log.debug("Производитель с ID {} найден", manufacturerID);
         return searchedManufacturer;
     }
 
@@ -50,12 +50,7 @@ public class ManufacturerService {
      * @param manufacturerID - уникальный идентификатор для поиска производителя.
      */
     public void deleteManufacturerById(long manufacturerID) {
-        Manufacturer searchedManufacturer = getManufacturerById(manufacturerID);
-        if (searchedManufacturer == null) {
-            throw new IllegalArgumentException("Производитель с ID " + manufacturerID + " не найден");
-        } else {
-            manufacturerRepository.deleteById(manufacturerID);
-            log.info("Производитель с ID {} удален", manufacturerID);
-        }
+        manufacturerRepository.deleteById(manufacturerID);
+        log.info("Производитель с ID {} удален", manufacturerID);
     }
 }

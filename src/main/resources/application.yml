@@ -5,10 +5,6 @@ server:
 spring:
   profiles:
     active: development
-  security:
-    user:
-      name: admin
-      password: admin
 
 ---
 spring:

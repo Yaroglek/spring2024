@@ -1,13 +1,15 @@
 package org.urfu.spring2024.app.service;
 
+import com.querydsl.core.BooleanBuilder;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
 import org.urfu.spring2024.app.repository.BoardGameRepository;
 import org.urfu.spring2024.domain.BoardGame;
 import org.urfu.spring2024.domain.Category;
+import org.urfu.spring2024.domain.QBoardGame;
 
 import java.util.List;
 
@@ -46,10 +48,11 @@ public class BoardGameService {
      * @param gameId - уникальный идентификатор для поиска игры.
      * @return - игра с указанным id.
      */
+    @NonNull
     public BoardGame getBoardGameById(long gameId) {
         var searchedGame = boardGameRepository.findById(gameId)
                 .orElseThrow(() -> new IllegalArgumentException("Игра с ID " + gameId + " не найдена"));
-        log.info("Игра с ID {} найдена", gameId);
+        log.debug("Игра с ID {} найдена", gameId);
         return searchedGame;
     }
 
@@ -59,19 +62,14 @@ public class BoardGameService {
      * @param gameId - уникальный идентификатор для поиска игры.
      */
     public void deleteBoardGameById(long gameId) {
-        BoardGame searchedGame = getBoardGameById(gameId);
-        if (searchedGame == null) {
-            throw new IllegalArgumentException("Игра с ID " + gameId + " не найдена");
-        } else {
-            boardGameRepository.deleteById(gameId);
-            log.info("Игра с ID {} удалена", gameId);
-        }
+        boardGameRepository.deleteById(gameId);
+        log.info("Игра с ID {} удалена", gameId);
     }
 
     /**
      * Добавление категории в список категорий игры.
      *
-     * @param gameId - уникальный идентификатор для поиска игры.
+     * @param gameId     - уникальный идентификатор для поиска игры.
      * @param categoryId - уникальный идентификатор для поиска категории.
      */
     public void addCategory(long gameId, long categoryId) {
@@ -88,7 +86,7 @@ public class BoardGameService {
     /**
      * Удаление категории из списка категорий игры.
      *
-     * @param gameId - уникальный идентификатор для поиска игры.
+     * @param gameId     - уникальный идентификатор для поиска игры.
      * @param categoryId - уникальный идентификатор для поиска категории.
      */
     public void removeCategory(long gameId, long categoryId) {
@@ -112,42 +110,34 @@ public class BoardGameService {
     }
 
     /**
-     * Полчуение всех игр, содержащих в названии определенную строку.
+     * Полчуение всех игр по определенным фильтрам.
      *
-     * @param name - строка для поиска
+     * @param name            - фильтрация по имени.
+     * @param categoryIds     - фильтрация по соответствии категориям.
+     * @param recommendedAge  - фильтрация по возрасту.
+     * @param amountOfPlayers - фильтрация по количеству игроков.
      * @return - список игр.
      */
-    public List<BoardGame> getBoardGamesByName(String name) {
-        return boardGameRepository.findAllByNameContainsIgnoreCase(name);
-    }
+    public List<BoardGame> getBoardGamesWithFilters(String name, List<Long> categoryIds, int recommendedAge, int amountOfPlayers) {
+        QBoardGame boardGame = QBoardGame.boardGame;
+        BooleanBuilder predicate = new BooleanBuilder();
 
-//    /**
-//     * Полчуение всех игр, подпадающих под определенную категорию.
-//     *
-//     * @param category - категория для поиска.
-//     * @return - список игр.
-//     */
-//    public List<BoardGame> getBoardGamesByCategory(Category category) {
-//        return boardGameRepository.findBoardGamesByCategoriesContains(category);
-//    }
-//
-//    /**
-//     * Полчуение всех игр, для которых рекомендованный возраст меньше запрашиваемого.
-//     *
-//     * @param age - запрашиваемы возраст.
-//     * @return - список игр.
-//     */
-//    public List<BoardGame> getBoardGamesByRecommendedAge(int age) {
-//        return boardGameRepository.findBoardGamesByRecommendedAgeLessThanEqual(age);
-//    }
-//
-//    /**
-//     * Полчуение всех игр, для которых рекомендованное количество игроков равняется запрашиваемому.
-//     *
-//     * @param players - запрашиваемое количество игроков.
-//     * @return - список игр.
-//     */
-//    public List<BoardGame> getBoardGamesByAmountOfPlayers(int players) {
-//        return boardGameRepository.findBoardGamesByAmountOfPlayersEquals(players);
-//    }
+        if (name != null && !name.isEmpty()) {
+            predicate.and(boardGame.name.containsIgnoreCase(name));
+        }
+
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            predicate.and(boardGame.categories.any().id.in(categoryIds));
+        }
+
+        if (recommendedAge != 0) {
+            predicate.and(boardGame.recommendedAge.loe(recommendedAge));
+        }
+
+        if (amountOfPlayers != 0) {
+            predicate.and(boardGame.amountOfPlayers.eq(amountOfPlayers));
+        }
+
+        return boardGameRepository.findAll(predicate);
+    }
 }
