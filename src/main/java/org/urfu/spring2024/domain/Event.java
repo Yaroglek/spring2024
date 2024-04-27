@@ -34,6 +34,12 @@ public class Event {
     private String title;
 
     /**
+     * Описание мероприятия.
+     */
+    @Column(name = "event_description")
+    private String description;
+
+    /**
      * Дата проведения мероприятия.
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
