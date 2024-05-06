@@ -3,12 +3,12 @@ package org.urfu.spring2024.app.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.urfu.spring2024.app.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.urfu.spring2024.domain.BoardGame;
 import org.urfu.spring2024.domain.User;
+
+import java.util.List;
 
 /**
  * Сервисный класс для работы с пользователем.
@@ -94,5 +94,14 @@ public class UserService {
             userRepository.save(user);
             log.info("Пользователь с ID {} более не отслеживает игру {} (ID {})", userId, game.getName(), gameId);
         }
+    }
+
+    /**
+     * Полчуение всех пользователей из базы данных.
+     *
+     * @return - список всех пользователей.
+     */
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
