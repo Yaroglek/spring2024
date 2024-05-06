@@ -12,6 +12,7 @@ import org.urfu.spring2024.domain.BoardGame;
 import org.urfu.spring2024.domain.User;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,8 +25,6 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private BoardGameService boardGameService;
-    @Mock
-    private BCryptPasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserService userService;
@@ -99,5 +98,17 @@ class UserServiceTest {
 
         userService.unTrackGame(1L, 1L);
         assertEquals(0, user.getTrackedGames().size());
+    }
+
+    @Test
+    public void testGetAllUsers() {
+        List<User> users = new ArrayList<>();
+        users.add(new User());
+        users.add(new User());
+
+        when(userRepository.findAll()).thenReturn(users);
+
+        List<User> result = userService.getAllUsers();
+        assertEquals(2, result.size());
     }
 }

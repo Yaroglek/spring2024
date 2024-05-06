@@ -20,6 +20,7 @@ public class BoardGameDTO extends RepresentationModel<BoardGameDTO> {
     @NotNull
     private LocalDate releaseDate;
 
+    @NotNull
     private long manufacturerId;
 
     @NotBlank

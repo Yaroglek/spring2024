@@ -22,7 +22,7 @@ public class ManufacturerAssembler extends RepresentationModelAssemblerSupport<M
         manufacturerDTO.setId(manufacturer.getId());
         manufacturerDTO.setName(manufacturer.getName());
         manufacturerDTO.setDescription(manufacturer.getDescription());
-        manufacturerDTO.setGamesIDs(manufacturer.getGames().stream()
+        manufacturerDTO.setGamesIds(manufacturer.getGames().stream()
                 .map(BoardGame::getId)
                 .collect(Collectors.toList()));
 

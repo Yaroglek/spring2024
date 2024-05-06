@@ -1,11 +1,7 @@
 package org.urfu.spring2024.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import org.antlr.v4.runtime.misc.NotNull;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -19,6 +15,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Discussion {
     /**
      * Уникальный идентификатор обсуждения.
@@ -55,6 +52,14 @@ public class Discussion {
      */
     @Column(name = "discussion_topic")
     private String topic;
+
+    /**
+     * Возможность оставлять сообщения (закрыта ли тема).
+     */
+    @Column(name = "discussion_open")
+    @Setter
+    private boolean isOpen;
+
 
     /**
      * Список сообщений в ветке.

@@ -1,10 +1,46 @@
 server:
   port: 8085
 
-
 spring:
   profiles:
     active: development
+
+---
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          yandex:
+            provider: yandex
+            authorizationGrantType: authorization_code
+            clientId: e0e8f2ba6891421fbf9369672b356372
+            clientSecret: a8c864b33a7e422f94c7e04a121230a3
+            redirect-uri: https://oauth.yandex.ru/verification_code #временный uri для отладки
+
+
+
+        provider:
+          yandex:
+            authorization-uri: https://oauth.yandex.ru/authorize
+            token-uri: https://oauth.yandex.ru/token
+            user-name-attribute: default_email
+            userInfoUri: https://login.yandex.ru/info
+
+---
+spring:
+  mail:
+    host: smtp.mail.ru
+    port: 587
+    username: TabletopTalks
+    password: 12345
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 ---
 spring:
@@ -19,6 +55,7 @@ spring:
   h2:
     console:
       enabled: true
+
 
 ---
 spring:
@@ -40,7 +77,10 @@ spring:
     activate:
       on-profile: production
   datasource:
-    url: jdbc:postgresql://localhost:5432/db_prod
+    url: jdbc:h2:mem:test_db
     username: prod
     password: prod
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
